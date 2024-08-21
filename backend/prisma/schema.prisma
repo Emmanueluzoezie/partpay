@@ -1,0 +1,190 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  pooling  = true
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  apiKey      String   @unique
+  name        String
+  description String?
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  vendor      Vendor[]
+}
+
+model User {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  email     String    @unique
+  firstName String
+  lastName  String
+  userName  String?
+  password  String?
+  admin     Boolean
+  project   Project[]
+}
+
+enum PaymentInstallment {
+  ONE
+  TWO
+  THREE
+  FOUR
+}
+
+enum PaymentStructure {
+  FULL
+  QUARTER
+  HALF
+  HALF_QUARTER
+}
+
+model Payment {
+  id              String        @id @default(uuid())
+  amount          Decimal
+  currency        String        @default("USDC")
+  dueDate         DateTime?
+  paidDate        DateTime?
+  status          PaymentStatus
+  type            PaymentType
+  fromId          String
+  fromType        EntityType
+  toId            String
+  toType          EntityType
+  equipmentId     String?
+  // equipment       Equipment?       @relation(fields: [equipmentId], references: [id])
+  transactionHash String?
+  metadata        Json?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  OVERDUE
+  CANCELLED
+  FAILED
+}
+
+enum PaymentType {
+  EQUIPMENT_PURCHASE
+  EQUIPMENT_INSTALLMENT
+  PLATFORM_FEE
+  REFUND
+  OTHER
+}
+
+enum EntityType {
+  VENDOR
+  BORROWER
+  LENDER
+  PLATFORM
+  OTHER
+}
+
+model Vendor {
+  id               String   @id @default(uuid())
+  createdAt        DateTime @default(now())
+  fullName         String
+  shopName         String?
+  description      String
+  transaction      String
+  wallet           String
+  collectionPubkey String  
+  uri              String
+  location         String?
+  phoneNumber      String?
+  email            String?
+  status           Boolean
+  businessType     String?
+  socialMedia      Json?
+  // inventory      Equipment[]
+  operatingHours   Json?
+  projectId        String
+  project          Project  @relation(fields: [projectId], references: [id])
+}
+
+model Equipment {
+  id                   String        @id @default(uuid())
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+  equipmentName        String
+  description          String
+  sku                  String?       @unique
+  category             String?
+  brand                String?
+  oneOffPrice          Float
+  installmentPrice     Float?
+  numberOfInstallments Int?
+  currency             String        @default("USDC")
+  stockQuantity        Int           @default(0)
+  isActive             Boolean       @default(true)
+  images               String[]
+  weight               Float?
+  dimensions           String?
+  assetPubkey          String
+  uri                  String
+  transaction          String
+  vendorId             String
+  insuranceId          String?
+  insurance            Insurance?    @relation(fields: [insuranceId], references: [id])
+  paymentTypes         PaymentType[]
+  installmentPlan      InstallmentPlan[]
+}
+
+model InstallmentPlan {
+  id                   String    @id @default(uuid())
+  equipmentId          String
+  equipment            Equipment @relation(fields: [equipmentId], references: [id])
+  totalAmount          Float
+  remainingAmount      Float
+  transaction          String
+  numberOfInstallments Int
+  paymentFrequency     String
+  nextPaymentDue       DateTime
+  isCompleted          Boolean   @default(false)
+}
+
+// model EquipmentRating {
+//   id          String    @id @default(uuid())
+//   createdAt   DateTime  @default(now())
+//   rate        Float
+//   userId      String
+//   VendorId    String
+//   description String
+//   equipmentId String
+//   equipment   Equipment @relation(fields: [equipmentId], references: [id])
+// }
+
+model SoldEquipment {
+  id                String   @id @default(uuid())
+  createdAt         DateTime @default(now())
+  productId         String
+  vendorId          String
+  borrowerId        String
+  isPaymentComplete Boolean
+}
+
+model Insurance {
+  id             String      @id @default(uuid())
+  createdAt      DateTime    @default(now())
+  provider       String
+  policyNumber   String
+  coverageAmount Float
+  expirationDate DateTime
+  quipment       Equipment[]
+}

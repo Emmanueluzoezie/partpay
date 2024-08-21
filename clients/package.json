@@ -1,0 +1,50 @@
+{
+  "name": "@partpay/sdk",
+  "version": "1.0.0",
+  "description": "SDKs for Partpay Protocol",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.js"
+    },
+    "./types": "./dist/types/index.d.ts"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "partpay",
+    "sdk",
+    "solana",
+    "blockchain",
+    "defi",
+    "equipment-financing",
+    "vendor",
+    "react"
+  ],
+  "author": "Emmanuel Uzoezie",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.7.4"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^22.0.0",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@rollup/plugin-typescript": "^8.3.3",
+    "@types/node": "^14.14.31",
+    "@types/react": "^17.0.0",
+    "react": "^17.0.2",
+    "rollup": "^2.79.1",
+    "typescript": "^5.3.3"
+  }
+}
