@@ -23,8 +23,8 @@ export class ProjectController {
     }
 
     @Get("user_projects")
-    async getUserProjects(@ApiKey() apiKey: string, @Query("email") email: string): Promise<any> {
-        const projects = await this.projectService.getAllUserProject(apiKey, email);
+    async getUserProjects( @Query("email") email: string): Promise<any> {
+        const projects = await this.projectService.getAllUserProject(email);
         return {
             projects,
             decryptionFailures: projects.filter(p => p.decryptionStatus === 'FAILED').length

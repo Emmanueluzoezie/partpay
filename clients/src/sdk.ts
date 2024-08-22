@@ -3,7 +3,7 @@ import { EquipmentService } from './services/vendor/Equipment';
 import { PaymentService } from './services/vendor/Payment';
 import { VendorService } from './services/vendor/Vendor';
 
-export class EquippaySDK {
+export class PartpaySDK {
   public vendor: VendorService;
   public equipment: EquipmentService;
   public payment: PaymentService;

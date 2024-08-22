@@ -5,14 +5,14 @@ export class EquipmentService {
   constructor(private apiClient: ApiClient) {}
 
   async createEquipment(equipmentData: Omit<Equipment, 'id'>): Promise<Equipment> {
-    return this.apiClient.post<Equipment>('/equipment', equipmentData);
+    return this.apiClient.post<Equipment>('/equipments', equipmentData);
   }
 
   async getEquipment(id: string): Promise<Equipment> {
-    return this.apiClient.get<Equipment>(`/equipment/get_equipment?id=${id}`);
+    return this.apiClient.get<Equipment>(`/equipments?id=${id}`);
   }
 
-  async getAllEquipment(vendorId: string): Promise<Equipment[]> {
-    return this.apiClient.get<Equipment[]>(`/equipment/vendor/${vendorId}`);
+  async getAllVendorEquipments(vendorId: string): Promise<Equipment[]> {
+    return this.apiClient.get<Equipment[]>(`/equipments?vendorId=${vendorId}`);
   }
 }

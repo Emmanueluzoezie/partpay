@@ -38,7 +38,7 @@ export class ProjectService {
         return project
     }
 
-    async getAllUserProject(apiKey: string, email: string): Promise<ProjectWithDecryptionStatus[]> {
+    async getAllUserProject(email: string): Promise<ProjectWithDecryptionStatus[]> {
       const user = await this.user.getUserByEmail(email);
       if (!user) {
           throw new Error("User is not found");

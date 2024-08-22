@@ -13,7 +13,7 @@ export class EquipmentController {
         return this.equipmentService.addEquipment(apiKey, createEquipmentDto);
     }
 
-    @Get('equipment')
+    @Get()
     async getEquipment(@ApiKey() apiKey: string, @Query('id') id: string): Promise<Equipment> {
         return this.equipmentService.getEquipmentById(apiKey, id);
     }
